@@ -1,0 +1,22 @@
+# CI definition for causal-inference-platform.
+# NOTE: this ships under docs/ because the push integration lacks the
+# Workflows permission for .github/workflows/. To activate, move this
+# file to .github/workflows/ci.yml.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt fastapi uvicorn httpx
+      - run: pytest -q
+      - run: python demo.py
